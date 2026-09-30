@@ -129,8 +129,7 @@
 }
 @theme {
   --animate-emerge: emerge 6s ease-in-out infinite;
-  --animate-step: step 1.1s ease-in-out infinite;
-  --animate-stroll: stroll 18s linear infinite;
+  --animate-stroll: stroll 14s linear infinite;
 
   /* Se hunde detrás del horizonte y vuelve a salir */
   @keyframes emerge {
@@ -147,33 +146,16 @@
     }
   }
 
-  /* Un paso por pie: se inclina hacia el pie que apoya y rebota entre pasos */
-  @keyframes step {
-    0%,
-    100% {
-      transform: rotate(-3deg) translateY(0);
-    }
-    25% {
-      transform: rotate(0deg) translateY(-4%);
-    }
-    50% {
-      transform: rotate(3deg) translateY(0);
-    }
-    75% {
-      transform: rotate(0deg) translateY(-4%);
-    }
-  }
-
   /* Camina hacia la izquierda, se da vuelta, regresa y se vuelve a girar */
   @keyframes stroll {
     0% {
       transform: translateX(0) scaleX(1);
     }
     45% {
-      transform: translateX(-20vw) scaleX(1);
+      transform: translateX(-30vw) scaleX(1);
     }
     50% {
-      transform: translateX(-20vw) scaleX(-1);
+      transform: translateX(-30vw) scaleX(-1);
     }
     95% {
       transform: translateX(0) scaleX(-1);
@@ -259,6 +241,56 @@
     92% { clip-path: inset(40% 0 38% 0); transform: translate(4px, 0); }
   }
 
+  /* --- Mongo articulado: ciclo de caminata humana (un paso por pie) --- */
+  --animate-hip: hip var(--walk, 1.3s) ease-in-out infinite;
+  --animate-knee: knee var(--walk, 1.3s) linear infinite;
+  --animate-arm: arm var(--walk, 1.3s) ease-in-out infinite;
+  --animate-bob: bob var(--walk, 1.3s) ease-in-out infinite;
+  --animate-blink-half: blink-half 4.6s linear infinite;
+  --animate-blink-closed: blink-closed 4.6s linear infinite;
+
+  /* Cadera: la pierna va adelante (talón) y atrás (despegue) */
+  @keyframes hip {
+    0%, 100% { transform: rotate(13deg); }
+    50% { transform: rotate(-13deg); }
+  }
+
+  /* Rodilla: recta al pisar, se dobla al balancear la pierna hacia adelante */
+  @keyframes knee {
+    0%, 100% { transform: rotate(0deg); }
+    12% { transform: rotate(-7deg); }
+    28% { transform: rotate(-2deg); }
+    50% { transform: rotate(-12deg); }
+    68% { transform: rotate(-28deg); }
+    86% { transform: rotate(-12deg); }
+  }
+
+  /* Brazos: van al revés que la pierna del mismo lado */
+  @keyframes arm {
+    0%, 100% { transform: rotate(-11deg); }
+    50% { transform: rotate(11deg); }
+  }
+
+  /* El cuerpo baja cuando las piernas están abiertas y sube al pasar sobre un pie */
+  @keyframes bob {
+    0%, 50%, 100% { transform: translateY(0.9%) rotate(-0.6deg); }
+    25%, 75% { transform: translateY(-0.5%) rotate(0.6deg); }
+  }
+
+  /* Parpadeo: medio cerrado → cerrado → medio cerrado */
+  @keyframes blink-half {
+    0%, 92.9% { opacity: 0; }
+    93%, 94.4% { opacity: 1; }
+    94.5%, 96.4% { opacity: 0; }
+    96.5%, 97.9% { opacity: 1; }
+    98%, 100% { opacity: 0; }
+  }
+  @keyframes blink-closed {
+    0%, 94.4% { opacity: 0; }
+    94.5%, 96.4% { opacity: 1; }
+    96.5%, 100% { opacity: 0; }
+  }
+
   /* Luz de tubo fluorescente que falla de vez en cuando */
   @keyframes flicker {
     0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 1; }
@@ -268,7 +300,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .animate-emerge,
-  .animate-step,
   .animate-stroll,
   .animate-marquee,
   .animate-marquee-reverse,
@@ -279,7 +310,13 @@
   .animate-grain,
   .animate-glitch-a,
   .animate-glitch-b,
-  .animate-flicker {
+  .animate-flicker,
+  .animate-hip,
+  .animate-knee,
+  .animate-arm,
+  .animate-bob,
+  .animate-blink-half,
+  .animate-blink-closed {
     animation: none;
   }
 }

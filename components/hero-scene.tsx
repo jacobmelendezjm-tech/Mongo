@@ -3,6 +3,9 @@
 import Image from "next/image"
 import { useEffect, useRef } from "react"
 
+import { Mongo3D } from "@/components/mongo-3d"
+import { RiggedMongo } from "@/components/rigged-mongo"
+
 // Publica el avance del scroll (0 → 1 hasta el final de la página, o una pantalla
 // si la página es más larga) como --scroll
 // para que los personajes se desplacen con CSS sin re-renderizar React.
@@ -60,23 +63,21 @@ export function HeroScene() {
         className="absolute bottom-[48%] left-[12.5%] z-0 h-auto w-[18%] animate-emerge select-none"
       />
 
-      {/* Capa exterior: avanza con el scroll (`translate`) y pasea de ida y vuelta
-          (`transform`); el video interior da los pasos. */}
-      <div
+      {/* Mongo en 3D (camina y gira sobre su eje dentro de la escena). Si aún no
+          existe el modelo, se usa la versión articulada 2D: la capa exterior avanza
+          con el scroll (`translate`) y pasea de ida y vuelta (`transform`). */}
+      <Mongo3D
         style={{ translate: "calc(var(--scroll) * -45vw) 0" }}
-        className="absolute right-[14%] bottom-[3%] z-20 w-[21%] animate-stroll"
-      >
-        <video
-          src="/mongo-fin.webm"
-          poster="/mongo.webp"
-          autoPlay
-          loop
-          muted
-          playsInline
-          aria-label="Personaje con chaqueta naranja"
-          className="h-auto w-full origin-bottom animate-step"
-        />
-      </div>
+        className="absolute inset-x-0 bottom-[-2%] z-20 h-[95%]"
+        fallback={
+          <div
+            style={{ translate: "calc(var(--scroll) * -45vw) 0" }}
+            className="absolute right-[14%] bottom-[3%] z-20 w-[21%] animate-stroll"
+          >
+            <RiggedMongo className="w-full" />
+          </div>
+        }
+      />
     </div>
   )
 }
